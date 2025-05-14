@@ -5,20 +5,15 @@ const bands = [
   'A Skylit Drive', 'Anywhere But Here', 'An Old Dog'
 ];
 
-// Helper function to strip articles from the start
-function stripArticle(name) {
-  return name.replace(/^(a |an |the )/i, '').trim();
-}
+// Create an array of objects with original and sortable names
+const sortedBands = bands
+  .map(band => ({
+    original: band,
+    sortable: band.replace(/^(a |an |the )/i, '').toLowerCase()
+  }))
+  .sort((a, b) => a.sortable.localeCompare(b.sortable))
+  .map(band => band.original); // Get back the original names in sorted order
 
-// Sort while ignoring articles
-const sortedBands = bands.slice().sort((a, b) => {
-  return stripArticle(a).toLowerCase().localeCompare(stripArticle(b).toLowerCase());
-});
-
-// Render the list in the DOM
+// Render the sorted list
 const ul = document.getElementById('band');
-sortedBands.forEach(band => {
-  const li = document.createElement('li');
-  li.textContent = band;
-  ul.appendChild(li);
-});
+ul.innerHTML = sortedBands.map(band => `<li>${band}</li>`).join('');
